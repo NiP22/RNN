@@ -1,14 +1,6 @@
 import pandas as pd
-
-
-def promo(x):
-    if isinstance(x, str):
-        if x.find("Y") != -1:
-            return 1
-        else:
-            return 0
-    else:
-        return 0
+from math import sin
+from math import pi
 
 
 def prep_data(df):
@@ -18,7 +10,7 @@ def prep_data(df):
     df['WEEK'] = df['WEEK'].apply(lambda x: int(x))
     df = pd.merge(df, tmp, on='WEEK')
     tmp = df[['WEEK', 'PROMO']].groupby('WEEK', as_index=False)[['PROMO']].sum()
-    tmp['Promo'] = tmp['PROMO'].apply(lambda x: promo(x))
+    tmp['Promo'] = tmp['PROMO'].apply(lambda x: 1 if isinstance(x, str) and 'Y' in x else 0)
     tmp = tmp.drop('PROMO', 1)
     df = pd.merge(df, tmp, on='WEEK')
     df['Year'] = df['WEEK'].apply(lambda x: int(str(x)[1:3]))
@@ -30,4 +22,7 @@ def prep_data(df):
     df = df.drop('BU', 1)
     df = df.drop_duplicates()
     df = df.sort_values(['Year', "Date"])
+    df['Month'] = df['Date'].apply(lambda x: x // 300 if x // 300 != 0 else 4)
+    df['Season'] = df['Month'].apply(lambda x: sin(2*pi*x/4))
+    df = df.drop('Month', 1)
     return df

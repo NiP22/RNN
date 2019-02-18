@@ -67,11 +67,15 @@ def lstm(df, plot_without_season=1):
         y_pred_seasonal = model.predict(X_test)
         plt.plot(np.arange(y_tr.shape[0] - 1, y_tr.shape[0] + y_pred.shape[0] - 1), y_pred_seasonal, color='black',
                  label='prediction without season')
+        print('mse without seasons')
+        print(mse(y_test, y_pred_seasonal))
     plt.plot(np.arange(y_tr.shape[0]), y_tr, color='blue')
     plt.plot(np.arange(y_tr.shape[0], y_tr.shape[0] + y_test.shape[0]), y_test, color='blue', label='real series')
     plt.plot(np.arange(y_tr.shape[0] - 1, y_tr.shape[0] + y_pred.shape[0] - 1), y_pred, color='red', label='prediction')
     y_pred = y_pred.reshape((52, ))
+    print('mse with seasons')
     print(mse(y_test, y_pred))
+
     plt.legend()
     plt.savefig(str(df.iloc[0, 0]) + "plot.png")
     plt.close()

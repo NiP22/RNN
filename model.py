@@ -73,6 +73,7 @@ def lstm(df, plot_without_season=1):
     plt.plot(np.arange(y_tr.shape[0], y_tr.shape[0] + y_test.shape[0]), y_test, color='blue', label='real series')
     plt.plot(np.arange(y_tr.shape[0] - 1, y_tr.shape[0] + y_pred.shape[0] - 1), y_pred, color='red', label='prediction')
     y_pred = y_pred.reshape((52, ))
+    
     print('mse with seasons')
     print(mse(y_test, y_pred))
 
